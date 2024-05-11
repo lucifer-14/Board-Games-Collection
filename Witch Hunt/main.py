@@ -1,4 +1,4 @@
 import os
 
 print('hello')
-pirnt("hi")
+print("hi")
