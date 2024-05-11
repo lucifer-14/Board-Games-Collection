@@ -41,7 +41,27 @@ class Login_Form(ttk.Frame):
 
 
     def create_control_buttons(self):
-        pass
+        container = ttk.Frame(self)
+        container.pack(fill=X, expand=YES, pady=(15, 10))
+
+        sub_btn = ttk.Button(
+            master=container,
+            text="Login",
+            command=self.on_submit,
+            bootstyle=SUCCESS,
+            width=6,
+        )
+        sub_btn.pack(side=RIGHT, padx=5)
+        sub_btn.focus_set()
+
+        cnl_btn = ttk.Button(
+            master=container,
+            text="Go Back",
+            command=self.on_cancel,
+            bootstyle=DANGER,
+            width=6,
+        )
+        cnl_btn.pack(side=RIGHT, padx=5)
 
 if __name__ == "__main__":
 
