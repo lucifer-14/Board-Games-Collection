@@ -1,0 +1,1 @@
+CREATE DATABASE `board-games-collection` DEFAULT CHARACTER SET = 'utf8mb4'
