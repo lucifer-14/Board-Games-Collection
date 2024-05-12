@@ -1,8 +1,10 @@
 import socket
 import threading
-from socket_handle.requests_handle import Requests_Handle
 import signal
 import sys
+import utils.config_handler as CONF_H
+from socket_handle.requests_handle import Requests_Handle
+
 
 class Server:
     def __init__(self, HOST: str = '127.0.0.1', PORT: int = 14141) -> None:
@@ -42,7 +44,12 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, sigint_handler)
     # up to here
 
-    server = Server()
+    conf_h = CONF_H.Config_Handler()
+
+    APP_SERVER_HOST = conf_h.get_config("APP_SERVER_HOST")
+    APP_SERVER_PORT = int(conf_h.get_config("APP_SERVER_PORT"))
+
+    server = Server(APP_SERVER_HOST, APP_SERVER_PORT)
     server.serv()
     print(server.conn_list)
             
