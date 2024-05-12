@@ -4,7 +4,7 @@ This is server-side
 import socket
 import json
 import socket_handle.auth_handle.login as SAL
-import sql_handle.sql_connector as SQLC
+
 
 class Requests_Handle:
     def __init__(self, conn: socket.socket) -> None:
@@ -19,7 +19,7 @@ class Requests_Handle:
             # full_data += data
         # if not full_data:
         #     break
-        print("reconstructing....")
+        print("receiving request....")
         full_data = conn.recv(4096)
 
         print(full_data.decode('utf-8'))
@@ -33,39 +33,14 @@ class Requests_Handle:
             self.login_handle()
 
         conn.close()
+        print("[+] Connection terminated.")
 
 
     def login_handle(self) -> None:
+
+        login_handle = SAL.Login(self.req_data['username'], self.req_data['password'])
         
-        response_code = 200
-        response_comment = "Success"
-        
-        sql_connection = SQLC.SQL_Connector()
-        query = "SELECT * FROM users WHERE username= %s"
-        search = (self.req_data['username'],)
-
-        res = sql_connection.fetchone_query(query, search)
-
-        if res:
-            true_password = res[2]
-
-            login_handle = SAL.Login(self.req_data['username'], self.req_data['password'])
-            login_handle_verify_res = login_handle.login_verify(true_password)
-            
-            response_data = {"is_login_success": login_handle_verify_res}
-
-            if login_handle_verify_res:
-                response_data.update({"comment": "Login success!"})
-            else:
-                response_data.update({"comment": "Login failed!"})
-
-        else:
-            response_data = {"is_login_success": False, "comment": "Login failed!"}
-    
-
-        full_response_data = {"response-code": response_code, 
-                            "response-comment": response_comment,
-                            "data": response_data}
+        full_response_data = login_handle.login_response()
         
         full_response_data = json.dumps(full_response_data)
 

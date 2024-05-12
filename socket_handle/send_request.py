@@ -29,12 +29,13 @@ class Send_Request:
             # if not data:
                 # break
             # return_data += data
-        print("reconstructing....")
+        print("receiving response....")
+        
         return_data = self.conn.recv(4096)
-
-        self.conn.close()
         print(return_data.decode('utf-8'))
+        
+        self.conn.close()
+        print("[+] Connection terminated (client-side).")
+        
 
         return json.loads(return_data.decode('utf-8'))
-        # while True:
-        #     print("hi")

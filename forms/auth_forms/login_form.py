@@ -84,7 +84,7 @@ class Login_Form(ttk.Frame):
 
     def on_login(self) -> None:
         login_handle = SAL.Login(self.username.get(), self.password.get())
-        login_res = login_handle.login()
+        login_res = login_handle.login_request()
         
         self.hidden_comment.config(text=login_res['comment'])
 
@@ -94,8 +94,6 @@ class Login_Form(ttk.Frame):
             pass
         else:
             self.hidden_comment.config(bootstyle=DANGER)
-
-        print(login_res['comment'])
         
 
     def on_back(self):
