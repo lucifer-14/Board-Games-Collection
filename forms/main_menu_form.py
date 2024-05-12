@@ -1,7 +1,8 @@
+import sys
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 
-from forms.auth_forms.login_form import Login_Form
+import forms.auth_forms.login_form as FALF
 
 class Main_Menu_Form(ttk.Frame):
     def __init__(self, master) -> None:
@@ -32,7 +33,7 @@ class Main_Menu_Form(ttk.Frame):
         register_btn = ttk.Button(master=container, text="Register", style='Custom.TButton', command=self.on_register)
         register_btn.pack(fill=X, pady=10)
 
-        exit_btn = ttk.Button(master=container, text="Exit", style='Custom.TButton', command=self.quit)
+        exit_btn = ttk.Button(master=container, text="Exit", style='Custom.TButton', command=self.on_exit())
         exit_btn.pack(fill=X, pady=10)
     
     def clear_content(self) -> None:
@@ -41,9 +42,13 @@ class Main_Menu_Form(ttk.Frame):
 
     def on_login(self) -> None:
         self.clear_content()
-        Login_Form(self.master)
+        FALF.Login_Form(self.master)
     
     def on_register(self) -> None:
+        pass
+
+    def on_exit(self) -> None:
+        # sys.exit()
         pass
 
 if __name__ == "__main__":
