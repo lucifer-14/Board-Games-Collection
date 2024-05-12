@@ -4,7 +4,7 @@ from ttkbootstrap.constants import *
 import socket_handle
 import sql_handle
 import forms.main_menu_form as FMMF
-
+import utils.config_handler as CONF_H
 
 class Main_Form(ttk.Frame):
     def __init__(self, master) -> None:
@@ -21,7 +21,8 @@ class Main_Form(ttk.Frame):
 
 
 if __name__ == "__main__":
-
-    app = ttk.Window(title="Board Games Collection", themename="superhero", resizable=(False, False))
+    conf_h = CONF_H.Config_Handler()
+    APP_NAME = conf_h.get_config("APP_NAME")
+    app = ttk.Window(title=APP_NAME, themename="superhero", resizable=(False, False))
     Main_Form(app)
     app.mainloop()
