@@ -32,6 +32,7 @@ class Send_Request:
         print("reconstructing....")
         return_data = self.conn.recv(4096)
 
+        self.conn.close()
         print(return_data.decode('utf-8'))
 
         return json.loads(return_data.decode('utf-8'))
