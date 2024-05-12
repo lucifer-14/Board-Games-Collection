@@ -42,13 +42,6 @@ class Main_Menu_Form(ttk.Frame):
     def on_login(self) -> None:
         self.clear_content()
         Login_Form(self.master)
-        # print(self)
-        # main_container2 = ttk.Frame(self)
-        # main_container2.pack()
-
-        # label = ttk.Label(main_container2, text="ehllo")
-        # label.pack()
-        # print(label)
     
     def on_register(self) -> None:
         pass
