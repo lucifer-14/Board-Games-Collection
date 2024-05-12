@@ -83,6 +83,8 @@ class Login_Form(ttk.Frame):
 
 
     def on_login(self) -> None:
+        # conf_h.set_config("REMEMBER_ME", response_data['remember_me']) set remember me after checking the checkbox
+
         login_handle = SAL.Login(self.username.get(), self.password.get())
         login_res = login_handle.login_request()
         
