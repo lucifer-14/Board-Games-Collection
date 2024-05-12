@@ -3,7 +3,7 @@ from ttkbootstrap.constants import *
 
 import socket_handle
 import sql_handle
-from forms.main_menu_form import Main_Menu_Form
+import forms.main_menu_form as FMMF
 
 
 class Main_Form(ttk.Frame):
@@ -16,7 +16,7 @@ class Main_Form(ttk.Frame):
         self.main_container = ttk.Frame(self)
         self.main_container.pack(fill=BOTH, expand=YES)
 
-        Main_Menu_Form(self.main_container)
+        FMMF.Main_Menu_Form(self.main_container)
 
 
 
