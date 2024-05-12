@@ -5,6 +5,8 @@ return true if login success, else, false
 import socket_handle.send_request as S_REQ
 import crypto_custom.bcrypt.bcrypt_verifier as b_verifier
 import sql_handle.sql_connector as SQLC
+import socket_handle.auth_handle.generate_session_id as SAGSI
+import utils.config_handler as CONF_H
 
 class Login():
     def __init__(self, username, password) -> None:
@@ -23,7 +25,10 @@ class Login():
         response_data = response['data']
 
         if response_data['is_login_success']:
-            # set session key
+            conf_h = CONF_H.Config_Handler()
+            conf_h.set_config("CURRENT_SESSION", response_data['session_id'])
+            conf_h.set_config("CURRENT_USERNAME", response_data['username'])
+            conf_h.set_config("CURRENT_USER_ID", response_data['user_id'])
             pass
 
         return response_data
@@ -50,7 +55,18 @@ class Login():
             response_data = {"is_login_success": verify_res}
 
             if verify_res:
+                session_id = SAGSI.generate_session_id()
+
+                sql_connection = SQLC.SQL_Connector()
+                query = "UPDATE users SET session_id = %s WHERE user_id = %s"
+                values = (session_id, res[0])
+                sql_connection.update_query(query, values)
+
                 response_data.update({"comment": "Login success!"})
+                response_data.update({"session_id": session_id})
+                response_data.update({"username": res[1]})
+                response_data.update({"user_id": res[0]})
+
             else:
                 response_data.update({"comment": "Login failed!"})
 
