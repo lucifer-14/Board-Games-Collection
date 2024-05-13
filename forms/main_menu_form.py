@@ -3,6 +3,7 @@ import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 
 import forms.auth_forms.login_form as FALF
+import forms.auth_forms.register_form as FALR
 
 class Main_Menu_Form(ttk.Frame):
     def __init__(self, master) -> None:
@@ -45,7 +46,8 @@ class Main_Menu_Form(ttk.Frame):
         FALF.Login_Form(self.master)
     
     def on_register(self) -> None:
-        pass
+        self.clear_content()
+        FALR.Register_Form(self.master)
 
     def on_exit(self) -> None:
         # sys.exit()
