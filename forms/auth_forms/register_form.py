@@ -3,7 +3,6 @@ from ttkbootstrap.constants import *
 
 import forms.main_menu_form as FMMF
 import socket_handle.auth_handle.register as SAR
-# import utils.config_handler as CONF_H
 import validation.auth_handle.register_form_validation as VAR
 
 
@@ -13,9 +12,6 @@ class Register_Form(ttk.Frame):
         master.pack(fill=BOTH, expand=YES)      # master = main_container
         self.master = master
 
-        # self.conf_h = CONF_H.Config_Handler()
-        # REMEMBER_ME = False if self.conf_h.get_config('REMEMBER_ME').lower() == "false" else True
-
         w_width = master.winfo_screenwidth()
         w_height = master.winfo_screenheight()
 
@@ -23,7 +19,6 @@ class Register_Form(ttk.Frame):
         self.email = ttk.StringVar(value="")
         self.password = ttk.StringVar(value="")
         self.re_password = ttk.StringVar(value="")
-        # self.remember_me_bool = ttk.BooleanVar(value=REMEMBER_ME)
 
         self.register_container = ttk.Frame(master, padding=(w_width / 8, w_height / 10))
         self.register_container.pack(fill=BOTH, expand=YES)
@@ -44,14 +39,6 @@ class Register_Form(ttk.Frame):
         self.create_form_entry("Password:", self.password, is_password=True)
         self.create_form_entry("Re-Type Password:", self.re_password, is_password=True)
 
-        # subcontainer1 = ttk.Frame(self.login_container)
-        # subcontainer1.pack(fill=X, expand=YES, pady=2)
-
-        # hidden_lbl1 = ttk.Label(subcontainer1, width=18)
-        # hidden_lbl1.pack(side=LEFT, padx=5)
-
-        # checkbox = ttk.Checkbutton(subcontainer1, text="Remember Me", variable=self.remember_me_bool, command=self.on_remember_me_click)
-        # checkbox.pack(fill=X, padx=5,expand=YES)
         self.create_control_buttons()
 
 
@@ -115,26 +102,24 @@ class Register_Form(ttk.Frame):
         if validation_res:
             self.hidden_comment.config(bootstyle=SUCCESS)
 
-            register_handle = SAR.Register(self.username)
+            register_handle = SAR.Register(username=self.username.get(),
+                                           email=self.email.get(),
+                                           password=self.password.get())
+            
+            register_res = register_handle.register_request()
+
+            self.hidden_comment.config(text=register_res['comment'])
+
+            if register_res['is_register_success']:
+                self.hidden_comment.config(bootstyle=SUCCESS)
+            
+            else:
+                self.hidden_comment.config(bootstyle=DANGER)
+                
 
         else:
             self.hidden_comment.config(bootstyle=DANGER)
 
-            # register_handle = SAR.Login(self.username.get(), self.password.get())
-            # register_res = register_handle.login_request()
-            
-            # self.hidden_comment.config(text=login_res['comment'])
-
-            # if (login_res['is_login_success']):
-            #     self.hidden_comment.config(bootstyle=SUCCESS)
-            #     # continue after login page
-            #     pass
-            # else:
-            #     self.hidden_comment.config(bootstyle=DANGER)
-    
-    # def on_remember_me_click(self):
-        
-    #     self.conf_h.set_config("REMEMBER_ME", self.remember_me_bool.get())
 
 
 
