@@ -52,6 +52,13 @@ class SQL_Connector:
         
         return result
     
+    def insert_query(self, query:str, values: tuple) -> None:
+        self.cursor.execute(query, values)
+        self.conn.commit()
+
+        self.cursor.close()
+        self.conn.close()
+    
 
     def update_query(self, query: str, values: tuple) -> None:
         
