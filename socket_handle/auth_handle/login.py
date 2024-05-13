@@ -29,7 +29,6 @@ class Login():
             conf_h.set_config("CURRENT_SESSION", response_data['session_id'])
             conf_h.set_config("CURRENT_USERNAME", response_data['username'])
             conf_h.set_config("CURRENT_USER_ID", response_data['user_id'])
-            pass
 
         return response_data
     
@@ -42,8 +41,8 @@ class Login():
         response_comment = "Success"
         
         sql_connection = SQLC.SQL_Connector()
-        query = "SELECT * FROM users WHERE username= %s"
-        search = (self.username,)
+        query = "SELECT * FROM users WHERE username = %s OR email = %s"
+        search = (self.username, self.username)
 
         res = sql_connection.fetchone_query(query, search)
 
