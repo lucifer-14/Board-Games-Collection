@@ -8,19 +8,23 @@ DATABASE_HOST=conf_h.get_config("DATABASE_HOST")
 DATABASE_PORT=int(conf_h.get_config("DATABASE_PORT"))
 DATABASE_USER=conf_h.get_config("DATABASE_USER")
 DATABASE_PASSWORD=conf_h.get_config("DATABASE_PASSWORD")
+DATABASE_TIMEZONE=conf_h.get_config("DATABASE_TIMEZONE")
 
 class SQL_Connector:
     def __init__(self, host: str = DATABASE_HOST, 
                 user: str = DATABASE_USER,
                 password: str = DATABASE_PASSWORD, 
-                database: str = DATABASE_NAME) -> None:
+                database: str = DATABASE_NAME,
+                timezone: str = DATABASE_TIMEZONE) -> None:
         
         self.conn = mysql.connector.connect(
             host = host,
             user = user,
             password = password,
-            database = database
+            database = database,
+            use_pure = True,
         )
+        
         self.cursor = self.conn.cursor()
 
 
