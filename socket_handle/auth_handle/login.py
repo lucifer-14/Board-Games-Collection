@@ -1,7 +1,3 @@
-"""
-return true if login success, else, false
-"""
-
 import socket_handle.send_request as S_REQ
 import crypto_custom.bcrypt.bcrypt_verifier as b_verifier
 import sql_handle.sql_connector as SQLC
