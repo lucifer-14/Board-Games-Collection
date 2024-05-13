@@ -18,7 +18,7 @@ class Config_Handler:
 
         return self.data_dict
 
-    def get_config(self, key: str) -> dict:
+    def get_config(self, key: str) -> str | None:
         try:
             return self.data_dict[key]
         except:

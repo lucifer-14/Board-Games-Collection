@@ -3,6 +3,7 @@ from ttkbootstrap.constants import *
 
 import forms.main_menu_form as FMMF
 import socket_handle.auth_handle.login as SAL
+import utils.config_handler as CONF_H
 
 
 class Login_Form(ttk.Frame):
@@ -11,11 +12,16 @@ class Login_Form(ttk.Frame):
         master.pack(fill=BOTH, expand=YES)      # master = main_container
         self.master = master
 
+        self.conf_h = CONF_H.Config_Handler()
+        REMEMBER_ME = False if self.conf_h.get_config('REMEMBER_ME').lower() == "false" else True
+
         w_width = master.winfo_screenwidth()
         w_height = master.winfo_screenheight()
 
         self.username = ttk.StringVar(value="")
         self.password = ttk.StringVar(value="")
+        
+        self.remember_me_bool = ttk.BooleanVar(value=REMEMBER_ME)
 
         self.login_container = ttk.Frame(master, padding=(w_width / 8, w_height / 10))
         self.login_container.pack(fill=BOTH, expand=YES)
@@ -33,6 +39,15 @@ class Login_Form(ttk.Frame):
 
         self.create_form_entry("Username or Email:", self.username)
         self.create_form_entry("Password:", self.password, is_password=True)
+
+        subcontainer1 = ttk.Frame(self.login_container)
+        subcontainer1.pack(fill=X, expand=YES, pady=2)
+
+        hidden_lbl1 = ttk.Label(subcontainer1, width=18)
+        hidden_lbl1.pack(side=LEFT, padx=5)
+
+        checkbox = ttk.Checkbutton(subcontainer1, text="Remember Me", variable=self.remember_me_bool, command=self.on_remember_me_click)
+        checkbox.pack(fill=X, padx=5,expand=YES)
         self.create_control_buttons()
 
 
@@ -83,8 +98,7 @@ class Login_Form(ttk.Frame):
 
 
     def on_login(self) -> None:
-        # conf_h.set_config("REMEMBER_ME", response_data['remember_me']) set remember me after checking the checkbox
-
+        
         login_handle = SAL.Login(self.username.get(), self.password.get())
         login_res = login_handle.login_request()
         
@@ -96,12 +110,18 @@ class Login_Form(ttk.Frame):
             pass
         else:
             self.hidden_comment.config(bootstyle=DANGER)
+    
+    def on_remember_me_click(self):
         
+        self.conf_h.set_config("REMEMBER_ME", self.remember_me_bool.get())
+
+
+
 
     def on_back(self):
         self.clear_content()
         FMMF.Main_Menu_Form(self.master)
-        pass
+        
 
 
 if __name__ == "__main__":
