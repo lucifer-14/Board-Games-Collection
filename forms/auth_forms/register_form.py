@@ -3,7 +3,8 @@ from ttkbootstrap.constants import *
 
 import forms.main_menu_form as FMMF
 import socket_handle.auth_handle.register as SAR
-import utils.config_handler as CONF_H
+# import utils.config_handler as CONF_H
+import validation.auth_handle.register_form_validation as VAR
 
 
 class Register_Form(ttk.Frame):
@@ -12,7 +13,7 @@ class Register_Form(ttk.Frame):
         master.pack(fill=BOTH, expand=YES)      # master = main_container
         self.master = master
 
-        self.conf_h = CONF_H.Config_Handler()
+        # self.conf_h = CONF_H.Config_Handler()
         # REMEMBER_ME = False if self.conf_h.get_config('REMEMBER_ME').lower() == "false" else True
 
         w_width = master.winfo_screenwidth()
@@ -101,18 +102,35 @@ class Register_Form(ttk.Frame):
 
 
     def on_register(self) -> None:
-        
-        login_handle = SAL.Login(self.username.get(), self.password.get())
-        login_res = login_handle.login_request()
-        
-        self.hidden_comment.config(text=login_res['comment'])
 
-        if (login_res['is_login_success']):
+        reg_validation = VAR.Register_Form_Validation(username=self.username.get(),
+                                                      email=self.email.get(),
+                                                      password=self.password.get(),
+                                                      re_password=self.re_password.get())
+        
+        validation_res, comment = reg_validation.validate()
+        self.hidden_comment.config(text=comment)
+
+
+        if validation_res:
             self.hidden_comment.config(bootstyle=SUCCESS)
-            # continue after login page
-            pass
+
+            register_handle = SAR.Register(self.username)
+
         else:
             self.hidden_comment.config(bootstyle=DANGER)
+
+            # register_handle = SAR.Login(self.username.get(), self.password.get())
+            # register_res = register_handle.login_request()
+            
+            # self.hidden_comment.config(text=login_res['comment'])
+
+            # if (login_res['is_login_success']):
+            #     self.hidden_comment.config(bootstyle=SUCCESS)
+            #     # continue after login page
+            #     pass
+            # else:
+            #     self.hidden_comment.config(bootstyle=DANGER)
     
     # def on_remember_me_click(self):
         
@@ -131,6 +149,6 @@ if __name__ == "__main__":
     app = ttk.Window(title="Board Games Collection", themename="superhero", resizable=(False, False))
     main_container = ttk.Frame(app)
     main_container.pack(fill=BOTH, expand=YES)
-    Login_Form(main_container)
+    Register_Form(main_container)
 
     app.mainloop()
