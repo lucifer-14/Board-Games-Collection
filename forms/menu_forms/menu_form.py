@@ -11,6 +11,7 @@ class Menu_Form(ttk.Frame):
         self.master = master
 
         self.conf_h = CONF_H.Config_Handler()
+        self.img_h = IMG_H.Image_Handler()
 
         w_width = master.winfo_screenwidth()
         w_height = master.winfo_screenheight()
@@ -27,20 +28,25 @@ class Menu_Form(ttk.Frame):
         #         print(f.read())
         #     self.photoimages.append(ttk.PhotoImage(name=k, file=path))
 
-        self.menu_container = ttk.Frame(master, padding=20)
+        self.menu_container = ttk.Frame(master, padding=40)
         self.menu_container.pack(fill=BOTH, expand=YES)
 
         self.top_container = ttk.Frame(self.menu_container)
         self.top_container.pack(side=TOP, fill=X, pady=(0,10), expand=YES)
 
         lbl_title = ttk.Label(self.top_container, text=self.conf_h.get_config("APP_NAME").title(), font=("Garamond", 20))
-        lbl_title.pack(fill=X)
+        lbl_title.pack(fill=X, pady=(20, 10))
 
         sep = ttk.Separator(self.top_container)
-        sep.pack(fill=X, expand=YES)
+        sep.pack(fill=X, expand=YES, pady=(20,10))
 
         self.create_side_panel()
-        self.create_main_panel()
+
+        self.main_panel = ttk.Frame(self.menu_container, padding=(20, 10))
+        # main_panel.config(width=1000)
+        self.main_panel.pack(side=RIGHT, fill=BOTH, expand=YES)
+
+        self.create_empty_panel()
 
     def create_side_panel(self):
 
@@ -50,34 +56,61 @@ class Menu_Form(ttk.Frame):
         # path = os.path.join("data", "icons", "game_icon.png")
         # lol = ttk.PhotoImage(file=path)
 
-        img_h = IMG_H.Image_Handler()
-        game_icon = img_h.get_icon("game", 150, 150)
-        print(game_icon)
+        
+        game_icon = self.img_h.get_icon("game", 200, 200)
+        # print(game_icon)
 
-        games_btn = ttk.Button(side_panel, image=game_icon)
+        games_btn = ttk.Button(side_panel, image=game_icon, command=self.create_games_panel)
         games_btn.image = game_icon
-        games_btn.pack(fill=X, pady=10, expand=YES)
+        games_btn.pack(fill=X, pady=10)
 
-        profile_btn = ttk.Button(side_panel, text="profile")
+        profile_icon = self.img_h.get_icon("profile", 200, 200)
+        profile_btn = ttk.Button(side_panel, image=profile_icon, command=self.create_profile_panel)
+        profile_btn.image = profile_icon
         profile_btn.pack(fill=X, pady=10)
-
-
 
         # title = ttk.Label(master=self.main_menu_container, text="Main Menu", font=("Garamond", 24))
         # title.pack(fill=X, pady=10, expand=YES, anchor=CENTER)
 
         # self.create_buttons()
 
-    def create_main_panel(self):
+    def create_empty_panel(self):
 
-        main_panel = ttk.Frame(self.menu_container, padding=(5, 10))
-        main_panel.pack(side=RIGHT, fill=BOTH, expand=YES)
+        self.clear_main_panel()
 
-        lbl = ttk.Label(main_panel, text="hello")
-        lbl.pack(fill=X)
+        frame = ttk.Frame(self.main_panel, relief=SOLID, borderwidth=1)
+        frame.pack(fill=X)
+        
+        lbl = ttk.Label(frame, text="There is nothing to show here")
+        lbl.pack(fill=X, padx=400, pady=205)
 
 
-        pass
+    def create_profile_panel(self):
+
+        self.clear_main_panel()
+
+        frame = ttk.Frame(self.main_panel, relief=SOLID, borderwidth=1)
+        frame.pack(fill=X)
+
+        lbl = ttk.Label(frame, text="Profile here")
+        lbl.pack(fill=X, padx=400, pady=205)
+
+
+    def create_games_panel(self):
+
+        self.clear_main_panel()
+
+        frame = ttk.Frame(self.main_panel, relief=SOLID, borderwidth=1)
+        frame.pack(fill=X)
+
+        lbl = ttk.Label(frame, text="Games here")
+        lbl.pack(fill=X, padx=400, pady=205)
+
+
+
+    def clear_main_panel(self):
+        for widget in self.main_panel.winfo_children():
+            widget.pack_forget()
 
     def create_buttons(self) -> None:
         container = ttk.Frame(self.main_menu_container)
